@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                CallRetrofit();
+            public void onClick(View v) { UpdateRetrofitData();
             }
         });
     }
@@ -62,6 +62,37 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<PostModel> call, Throwable t) {
 
             }
+        });
+
+    }
+
+    private void UpdateRetrofitData() {
+       // String postBody = ed1.getText().toString();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://httpbin.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        PostRequestApi postRequestApi = retrofit.create(PostRequestApi.class);
+
+        PostModel postModel = new PostModel("post55", "Post Changed Successfully");
+
+        Call<PostModel> call = postRequestApi.PatchData(postModel);
+
+        call.enqueue(new Callback<PostModel>() {
+            @Override
+            public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                txt.setText(response.body().getJson().getData());
+
+                Toast.makeText(MainActivity.this, "Code: "+response.code(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<PostModel> call, Throwable t) {
+
+            }
+
         });
 
     }
