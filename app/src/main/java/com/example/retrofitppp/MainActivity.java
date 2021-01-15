@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         PostRequestApi postRequestApi = retrofit.create(PostRequestApi.class);
 
-        PostModel postModel = new PostModel("post55", "Post Changed Successfully");
+        PostModel postModel = new PostModel("post55", "Patched Successfully");
 
         Call<PostModel> call = postRequestApi.PatchData(postModel);
 
